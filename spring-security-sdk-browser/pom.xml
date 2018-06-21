@@ -21,9 +21,9 @@
         <!-- 集群session管理 -->
         <dependency>
             <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session</artifactId>
-            <version>1.3.3.RELEASE</version>
+            <artifactId>spring-session-data-redis</artifactId>
         </dependency>
+
     </dependencies>
 
 

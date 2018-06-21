@@ -1,0 +1,9 @@
+spring:
+  # 数据库配置
+  datasource:
+      url: jdbc:mysql://localhost:3306/spring-security-sdk?characterEncoding=utf-8&uesSSL=false
+      username: root
+      password: zwz520
+      driver-class-name: com.mysql.jdbc.Driver
+  session:
+    store-type: none
