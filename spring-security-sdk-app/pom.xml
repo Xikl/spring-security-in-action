@@ -12,5 +12,12 @@
     <packaging>jar</packaging>
     <artifactId>spring-security-sdk-app</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.ximo.security</groupId>
+            <artifactId>spring-security-sdk-core</artifactId>
+            <version>${spring.security.sdk.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

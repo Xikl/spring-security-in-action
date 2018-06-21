@@ -15,6 +15,10 @@
         <module>spring-security-sdk-demo</module>
     </modules>
 
+    <properties>
+        <spring.security.sdk.version>1.0.0-SNAPSHOT</spring.security.sdk.version>
+    </properties>
+
     <!--搞定版本-->
     <dependencyManagement>
         <dependencies>
