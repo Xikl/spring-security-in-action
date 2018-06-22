@@ -20,4 +20,23 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <!--添加编译插件-->
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.0.3.RELEASE</version>
+                <!--执行-->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <finalName>spring-security-sdk-demo</finalName>
+    </build>
 </project>
