@@ -13,11 +13,18 @@
     <artifactId>spring-security-sdk-demo</artifactId>
 
     <dependencies>
+        <!--引入sdk中的浏览器包-->
         <dependency>
             <groupId>com.ximo.security</groupId>
             <artifactId>spring-security-sdk-browser</artifactId>
             <version>${spring.security.sdk.version}</version>
         </dependency>
+        <!--引入test包-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
