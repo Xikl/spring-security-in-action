@@ -22,7 +22,7 @@ public class WebFilterConfig {
         //声明注册filter的注册类
         FilterRegistrationBean<SdkFilter> registrationBean = new FilterRegistrationBean<>();
         List<String> urls = new ArrayList<>();
-        urls.add("/user/**");
+        urls.add("/user/*");
         registrationBean.setFilter(new SdkFilter());
         registrationBean.setUrlPatterns(urls);
         return registrationBean;
