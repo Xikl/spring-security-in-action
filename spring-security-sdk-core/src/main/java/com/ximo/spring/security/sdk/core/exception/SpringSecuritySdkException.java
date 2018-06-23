@@ -24,4 +24,13 @@ public class SpringSecuritySdkException extends RuntimeException {
         this.code = resultEnums.getCode();
     }
 
+    public SpringSecuritySdkException(Integer code, String message) {
+        super(message);
+        this.code = code;
+    }
+
+    public SpringSecuritySdkException(Integer code, String message, Throwable cause) {
+        super(message, cause);
+        this.code = code;
+    }
 }

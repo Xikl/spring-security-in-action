@@ -2,6 +2,7 @@ package com.ximo.spring.security.sdk.core.vo;
 
 import com.ximo.spring.security.sdk.core.enums.ResultEnums;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author 朱文赵
@@ -66,6 +67,11 @@ public class ResultVO<T> {
         return new ResultVO<>(false, code, msg, null);
     }
 
+
+    /** 错误方法*/
+    public static <T> ResultVO<T> error(HttpStatus httpStatus) {
+        return new ResultVO<>(false, httpStatus.value(), httpStatus.getReasonPhrase(), null);
+    }
 
 
 
