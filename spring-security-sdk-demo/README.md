@@ -41,3 +41,30 @@ public class MyControllerTests {
 
 }
 ```
+#### 2.记录时间
+- 2.1 不推荐使用
+```java
+new Date().getTime();
+``` 
+- 2.2 java8之前
+```java
+log.info("time filter start");
+long start = System.currentTimeMillis();
+filterChain.doFilter(servletRequest, servletResponse);
+long timeElapsed = System.currentTimeMillis() - start;
+log.info("time filter timeElapsed:{}ms", timeElapsed);
+log.info("time filter finish");
+```
+- 2.3 java8
+```java
+log.info("time filter start");
+
+Instant start = Instant.now();
+filterChain.doFilter(servletRequest, servletResponse);
+Instant end = Instant.now();
+Duration timeElapsed = Duration.between(start, end);
+long millis = timeElapsed.toMillis();
+
+log.info("time filter timeElapsed:{}ms", millis);
+log.info("time filter finish");
+```
