@@ -10,4 +10,7 @@ public interface CommonConstants {
     /** 分号 */
     String SEMICOLON = ";";
 
+    //----------------------------
+    /** session key */
+    String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
 }
