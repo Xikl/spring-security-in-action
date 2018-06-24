@@ -48,6 +48,7 @@ public class AsyncController {
         //存入模拟队列中
         mockQueue.setPlaceOrder(orderNumber);
 
+        //直接返回改结果
         DeferredResult<String> result = new DeferredResult<>();
         deferredResultHolder.put(orderNumber, result);
         log.info("主线程结束");

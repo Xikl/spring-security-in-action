@@ -15,7 +15,7 @@ import java.util.Date;
  * @description
  */
 @Slf4j
-@Component
+//@Component
 public class TimeFilter implements Filter {
 
 

@@ -53,17 +53,15 @@ public class MockQueueListener implements ApplicationListener<ContextRefreshedEv
      * 设置该订单的deferredResult返回值
      */
     private void setDeferredResult() {
-        while (true) {
-            try {
-                String completeOrder = mockQueue.getCompleteOrder();
-                if (StringUtils.isNotBlank(completeOrder)) {
-                    deferredResultHolder.take(completeOrder)
-                            .setResult("place order success");
-                    mockQueue.setCompleteOrder(null);
-                }
-            } catch (Exception e) {
-                log.info("【mock listener listener】出现错误", e);
+        try {
+            String completeOrder = mockQueue.getCompleteOrder();
+            if (StringUtils.isNotBlank(completeOrder)) {
+                deferredResultHolder.take(completeOrder)
+                        .setResult("place order success");
+                mockQueue.setCompleteOrder(null);
             }
+        } catch (Exception e) {
+            log.info("【mock listener listener】出现错误", e);
         }
     }
 }

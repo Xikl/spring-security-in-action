@@ -2,6 +2,7 @@ package com.ximo.spring.security.sdk.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @author 朱文赵
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description 标示为spring boot 启动类
  */
 @SpringBootApplication
+@EnableSwagger2
 public class DemoApplication {
 
     public static void main(String[] args) {
