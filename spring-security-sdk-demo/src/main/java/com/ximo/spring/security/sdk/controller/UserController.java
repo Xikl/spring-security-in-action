@@ -7,6 +7,9 @@ import com.ximo.spring.security.sdk.domain.User;
 import com.ximo.spring.security.sdk.dto.UserQueryCondition;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +28,23 @@ import java.util.Map;
 @RestController
 public class UserController {
 
+
+    /**
+     * 获取当前用户
+     *
+     * @return 当前用户
+     */
+    @GetMapping("/me")
+    public ResultVO getCurrentUser(Authentication authentication) {
+        return ResultVO.success(authentication.getPrincipal());
+
+    }
+
+    @GetMapping("/me-2")
+    public ResultVO getCurrentUser(@AuthenticationPrincipal UserDetails user) {
+        return ResultVO.success(user);
+
+    }
 
     @GetMapping("/{userId:\\d+}")
     public ResultVO<User> findOne(@PathVariable("userId") Integer userId) {
