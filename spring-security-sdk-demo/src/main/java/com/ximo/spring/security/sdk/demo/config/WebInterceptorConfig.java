@@ -9,9 +9,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * @author 朱文赵
  * @date 2018/6/23
- * @description
+ * @description 先取消创建拦截器
  */
-@Configuration
+//@Configuration
 public class WebInterceptorConfig implements WebMvcConfigurer {
 
     @Autowired

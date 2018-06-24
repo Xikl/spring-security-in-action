@@ -33,7 +33,6 @@ public class FileController {
         log.info(file.getContentType());
         log.info(String.valueOf(file.getSize()));
 
-        ;
         File localFile = new File(FOLDER, file.getOriginalFilename());
         //写入文件
         file.transferTo(localFile);

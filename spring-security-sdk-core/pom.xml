@@ -12,6 +12,10 @@
     <packaging>jar</packaging>
     <artifactId>spring-security-sdk-core</artifactId>
 
+    <properties>
+        <guava.version>25.1-jre</guava.version>
+    </properties>
+
     <dependencies>
         <!--引入spring security 和 oauth等配置-->
         <dependency>
@@ -74,6 +78,12 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <!--使用最新版本guava-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
     </dependencies>
 
