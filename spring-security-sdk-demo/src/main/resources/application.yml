@@ -7,3 +7,8 @@ spring:
       driver-class-name: com.mysql.jdbc.Driver
   session:
     store-type: none
+  security:
+    user:
+      name: user
+      password: 123
+      roles: USER
