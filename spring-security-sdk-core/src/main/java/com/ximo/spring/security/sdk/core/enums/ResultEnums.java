@@ -16,6 +16,7 @@ public enum ResultEnums {
     AUTHORITY_NOT_FOUND(1, "没有该权限"),
     RESOURCE_NOT_FOUND(2, "哎呦，你所查找的好像消失了"),
     CONSTRAINT_ERROR(3, "约束异常"),
+    AUTHENTICATION_REQUIRE(4, "访问的服务需要验证，请引导用户到登录页面"),
     ;
 
 

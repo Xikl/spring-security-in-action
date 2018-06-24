@@ -1,5 +1,7 @@
 package com.ximo.spring.security.sdk.browser.config;
 
+import com.ximo.spring.security.sdk.core.config.properties.SecurityProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,14 +18,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private SecurityProperties securityProperties;
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR")
-                .antMatchers("/user/**").authenticated()
+                .antMatchers("/authentication/require", "/favicon.ico",
+                        securityProperties.getBrowser().getLoginPage()).permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .formLogin();
+                .formLogin().loginPage("/authentication/require").loginProcessingUrl("/authentication/form")
+                .and()
+                .csrf().disable();
     }
 
     @Bean
