@@ -27,7 +27,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR")
-                .antMatchers("/authentication/require", "/favicon.ico",
+                .antMatchers("/authentication/require", "/favicon.ico", "/code/image",
                         securityProperties.getBrowser().getLoginPage()).permitAll()
                 .anyRequest().authenticated()
                 .and()

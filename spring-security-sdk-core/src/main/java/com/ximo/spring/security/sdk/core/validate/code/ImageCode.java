@@ -2,7 +2,6 @@ package com.ximo.spring.security.sdk.core.validate.code;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
  * @description 验证码信息
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class ImageCode {
 
