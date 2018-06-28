@@ -1,4 +1,4 @@
-package com.ximo.spring.security.sdk.core.validate.code;
+package com.ximo.spring.security.sdk.core.entity.validate.code;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,5 +29,10 @@ public class ImageCode {
         this.image = image;
         this.code = code;
         this.expiredTime = LocalDateTime.now().plusSeconds(expireIn);
+    }
+
+    /** 判断该验证码是否过期 */
+    public boolean isExpire() {
+        return LocalDateTime.now().isAfter(expiredTime);
     }
 }

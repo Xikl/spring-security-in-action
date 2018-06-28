@@ -1,6 +1,6 @@
 package com.ximo.spring.security.sdk.core.controller;
 
-import com.ximo.spring.security.sdk.core.validate.code.ImageCode;
+import com.ximo.spring.security.sdk.core.entity.validate.code.ImageCode;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
 
-import static com.ximo.spring.security.sdk.core.constants.CommonConstants.SESSION_KEY;
+import static com.ximo.spring.security.sdk.core.constants.CommonConstants.SESSION_KEY_IMAGE_CODE;
 
 /**
  * @author 朱文赵
@@ -33,7 +33,7 @@ public class ValidateCodeController {
     public void createCodeImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         ImageCode imageCode = createCodeImage(request);
-        sessionStrategy.setAttribute(new ServletWebRequest(request), SESSION_KEY, imageCode);
+        sessionStrategy.setAttribute(new ServletWebRequest(request), SESSION_KEY_IMAGE_CODE, imageCode);
         ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
     }
 

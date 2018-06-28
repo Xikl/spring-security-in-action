@@ -11,6 +11,6 @@ public interface CommonConstants {
     String SEMICOLON = ";";
 
     //----------------------------
-    /** session key */
-    String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
+    /** SESSION_KEY_IMAGE_CODE */
+    String SESSION_KEY_IMAGE_CODE = "SESSION_KEY_IMAGE_CODE";
 }
