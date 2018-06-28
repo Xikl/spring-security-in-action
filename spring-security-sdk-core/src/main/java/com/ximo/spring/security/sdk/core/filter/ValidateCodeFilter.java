@@ -29,6 +29,11 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     private AuthenticationFailureHandler authenticationFailureHandler;
 
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+
+    public ValidateCodeFilter(AuthenticationFailureHandler authenticationFailureHandler) {
+        this.authenticationFailureHandler = authenticationFailureHandler;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -37,7 +42,9 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
             try {
                 validate(new ServletWebRequest(request));
             } catch (ValidateCodeException e) {
+                //出现错误直接返回
                 authenticationFailureHandler.onAuthenticationFailure(request, response, e);
+                return;
             }
         }
         filterChain.doFilter(request, response);
