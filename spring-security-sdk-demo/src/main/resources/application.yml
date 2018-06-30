@@ -12,12 +12,12 @@ spring:
       name: user
       password: 123
       roles: USER
-user-default:
-  security:
+#user-default:
+#  security:
 #    browser:
 #      login-page: /demo-login.html
-    code:
-      image:
-        length: 6
-        width: 100
-        intercept-url: /user,/user/*
+#    code:
+#      image:
+#        length: 6
+#        width: 100
+#        intercept-url: /user,/user/*

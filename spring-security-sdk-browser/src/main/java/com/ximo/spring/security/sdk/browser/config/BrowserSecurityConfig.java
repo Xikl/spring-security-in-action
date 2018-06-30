@@ -5,14 +5,20 @@ import com.ximo.spring.security.sdk.browser.handler.CustomAuthenticationSuccessH
 import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
 import com.ximo.spring.security.sdk.core.validate.code.filter.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 /**
  * @author 朱文赵
@@ -22,9 +28,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private DataSource dataSource;
+
     /** 安全配置 */
     @Autowired
     private SdkSecurityProperties sdkSecurityProperties;
+
+    /** 用户信息service */
+    @Qualifier("userServiceImpl")
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     /** 失败处理控制器 */
     @Autowired
@@ -55,11 +69,26 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(customAuthenticationSuccessHandler)
                 .failureHandler(customAuthenticationFailureHandler)
                 .and()
+                .rememberMe()
+                .tokenValiditySeconds(sdkSecurityProperties.getBrowser().getRememberMeSeconds())
+                .userDetailsService(userDetailsService)
+                .tokenRepository(persistentTokenRepository())
+                .and()
                 .csrf().disable();
     }
 
+    /** 密码解析器 */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    /** 创建rememberMe的存储仓库 默认为内存 */
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+//        jdbcTokenRepository.setCreateTableOnStartup(true);
+        jdbcTokenRepository.setDataSource(dataSource);
+        return jdbcTokenRepository;
     }
 }

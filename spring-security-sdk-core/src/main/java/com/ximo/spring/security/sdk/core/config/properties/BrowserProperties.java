@@ -17,4 +17,7 @@ public class BrowserProperties {
     /** 登录返回类型 */
     private LoginResponseType loginType = LoginResponseType.JSON;
 
+    /** 过期时间为一天 */
+    private int rememberMeSeconds = 60 * 60 * 24;
+
 }

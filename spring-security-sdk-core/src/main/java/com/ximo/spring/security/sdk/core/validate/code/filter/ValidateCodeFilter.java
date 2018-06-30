@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.ximo.spring.security.sdk.core.constants.CommonConstants.COMMA;
@@ -34,7 +36,7 @@ import static java.util.stream.Collectors.toSet;
 public class ValidateCodeFilter extends OncePerRequestFilter {
 
     /** 存放需要拦截的url */
-    private Set<String> interceptUrlsSet;
+    private Set<String> interceptUrlsSet = new HashSet<>();
 
     /** ant路径匹配器 */
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
@@ -62,9 +64,12 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     @Override
     public void afterPropertiesSet() throws ServletException {
         super.afterPropertiesSet();
-        //获得需要拦截的url的数组
-        String[] configUrls = StringUtils.splitByWholeSeparatorPreserveAllTokens(sdkSecurityProperties.getCode().getImage().getInterceptUrl(), COMMA);
-        interceptUrlsSet = Arrays.stream(configUrls).collect(toSet());
+        //获得需要拦截的url的数组 可能为空
+        Optional<String[]> configUrlsOptional = Optional.ofNullable(StringUtils
+                .splitByWholeSeparatorPreserveAllTokens(sdkSecurityProperties.getCode().getImage().getInterceptUrl(), COMMA));
+        //不为空则添加
+        configUrlsOptional.ifPresent(configUrl -> interceptUrlsSet.addAll(Arrays.asList(configUrl)));
+        //添加登录url
         interceptUrlsSet.add("/authentication/form");
     }
 
