@@ -1,7 +1,7 @@
-package com.ximo.spring.security.sdk.core.filter;
+package com.ximo.spring.security.sdk.core.validate.code.filter;
 
 import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
-import com.ximo.spring.security.sdk.core.entity.validate.code.ImageCode;
+import com.ximo.spring.security.sdk.core.validate.code.entity.ImageCode;
 import com.ximo.spring.security.sdk.core.exception.ValidateCodeException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;

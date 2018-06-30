@@ -1,4 +1,4 @@
-package com.ximo.spring.security.sdk.core.entity.validate.code;
+package com.ximo.spring.security.sdk.core.validate.code.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

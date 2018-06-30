@@ -1,16 +1,24 @@
 package com.ximo.spring.security.sdk.core.config;
 
+import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
+import com.ximo.spring.security.sdk.core.validate.code.generator.ImageCodeGenerator;
+import com.ximo.spring.security.sdk.core.validate.code.generator.ValidateCodeGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * @author 朱文赵
  * @date 2018/6/28
- * @description
+ * @description bean生成配置类
  */
 @Configuration
 public class BeanConfig {
+
+    @Autowired
+    private SdkSecurityProperties sdkSecurityProperties;
 
     /** 配置objectMapper */
     @Bean
@@ -18,5 +26,16 @@ public class BeanConfig {
         return new ObjectMapper();
     }
 
+    /**
+     * 配置验证码生成器
+     * 其中添加了{@link ConditionalOnMissingBean}意味着当系统中存在一个imageCodeGenerator的时候 则不会注入该bean
+     *
+     * @return 验证码生成器
+     */
+    @Bean
+    @ConditionalOnMissingBean(name = "imageCodeGenerator")
+    public ValidateCodeGenerator imageCodeGenerator() {
+        return new ImageCodeGenerator(sdkSecurityProperties);
+    }
 
 }

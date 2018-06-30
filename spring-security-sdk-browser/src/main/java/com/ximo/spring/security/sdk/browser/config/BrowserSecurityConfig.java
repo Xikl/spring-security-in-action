@@ -3,7 +3,7 @@ package com.ximo.spring.security.sdk.browser.config;
 import com.ximo.spring.security.sdk.browser.handler.CustomAuthenticationFailureHandler;
 import com.ximo.spring.security.sdk.browser.handler.CustomAuthenticationSuccessHandler;
 import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
-import com.ximo.spring.security.sdk.core.filter.ValidateCodeFilter;
+import com.ximo.spring.security.sdk.core.validate.code.filter.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
