@@ -36,9 +36,13 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter(customAuthenticationFailureHandler, sdkSecurityProperties);
+        //调用配置选项
+        validateCodeFilter.afterPropertiesSet();
+        //security 配置
         http
                 //加到用户名密码过滤器的前面
-                .addFilterBefore(new ValidateCodeFilter(customAuthenticationFailureHandler), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR")
                 .antMatchers("/authentication/require", "/favicon.ico", "/code/image",

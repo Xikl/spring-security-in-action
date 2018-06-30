@@ -14,5 +14,10 @@ spring:
       roles: USER
 user-default:
   security:
-    browser:
-      login-page: /demo-login.html
+#    browser:
+#      login-page: /demo-login.html
+    code:
+      image:
+        length: 6
+        width: 100
+        intercept-url: /user,/user/*

@@ -10,6 +10,9 @@ public interface CommonConstants {
     /** 分号 */
     String SEMICOLON = ";";
 
+    /** 逗号 */
+    String COMMA = ",";
+
     //----------------------------
     /** SESSION_KEY_IMAGE_CODE */
     String SESSION_KEY_IMAGE_CODE = "SESSION_KEY_IMAGE_CODE";

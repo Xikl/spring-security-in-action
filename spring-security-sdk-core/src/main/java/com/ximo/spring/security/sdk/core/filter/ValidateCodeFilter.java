@@ -1,11 +1,14 @@
 package com.ximo.spring.security.sdk.core.filter;
 
+import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
 import com.ximo.spring.security.sdk.core.entity.validate.code.ImageCode;
 import com.ximo.spring.security.sdk.core.exception.ValidateCodeException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -16,8 +19,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Set;
 
+import static com.ximo.spring.security.sdk.core.constants.CommonConstants.COMMA;
 import static com.ximo.spring.security.sdk.core.constants.CommonConstants.SESSION_KEY_IMAGE_CODE;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * @author 朱文赵
@@ -26,19 +33,48 @@ import static com.ximo.spring.security.sdk.core.constants.CommonConstants.SESSIO
  */
 public class ValidateCodeFilter extends OncePerRequestFilter {
 
+    /** 存放需要拦截的url */
+    private Set<String> interceptUrlsSet;
+
+    /** ant路径匹配器 */
+    private AntPathMatcher antPathMatcher = new AntPathMatcher();
+
+    /** Sdk安全配置 */
+    private SdkSecurityProperties sdkSecurityProperties;
+
+    /** 验证失败处理器 */
     private AuthenticationFailureHandler authenticationFailureHandler;
 
+    /** session工具类 */
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
 
-    public ValidateCodeFilter(AuthenticationFailureHandler authenticationFailureHandler) {
+    public ValidateCodeFilter(AuthenticationFailureHandler authenticationFailureHandler, SdkSecurityProperties sdkSecurityProperties) {
         this.authenticationFailureHandler = authenticationFailureHandler;
+        this.sdkSecurityProperties = sdkSecurityProperties;
+    }
+
+    /**
+     * 调用 {@link InitializingBean#afterPropertiesSet()}方法
+     * 初始化需要拦截的urlSet 赋值需要拦截的url给{@link #interceptUrlsSet}
+     *
+     * @throws ServletException servlet异常
+     */
+    @Override
+    public void afterPropertiesSet() throws ServletException {
+        super.afterPropertiesSet();
+        //获得需要拦截的url的数组
+        String[] configUrls = StringUtils.splitByWholeSeparatorPreserveAllTokens(sdkSecurityProperties.getCode().getImage().getInterceptUrl(), COMMA);
+        interceptUrlsSet = Arrays.stream(configUrls).collect(toSet());
+        interceptUrlsSet.add("/authentication/form");
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (StringUtils.equals("/authentication/form", request.getRequestURI())
-                && StringUtils.equalsIgnoreCase(request.getMethod(), "post")) {
+        //判断是否需要拦截
+        boolean interceptor = interceptUrlsSet.stream().anyMatch(url -> antPathMatcher.match(url, request.getRequestURI()));
+        //如果需要过滤
+        if (interceptor) {
             try {
                 validate(new ServletWebRequest(request));
             } catch (ValidateCodeException e) {
@@ -48,7 +84,6 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
-
     }
 
     private void validate(ServletWebRequest request) throws ServletRequestBindingException {

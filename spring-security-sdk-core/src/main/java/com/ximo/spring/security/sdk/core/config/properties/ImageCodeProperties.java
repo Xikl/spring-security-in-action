@@ -12,15 +12,17 @@ public class ImageCodeProperties {
 
     /** 验证码宽度 */
     private int width = 67;
+
     /** 验证码高度 */
     private int height = 23;
+
     /** 验证码长度 */
     private int length = 4;
+
     /** 验证码过期时间 */
-    private int exprieIn = 60;
+    private int expireIn = 60;
 
-
-
-
+    /** 需要拦截的url */
+    private String interceptUrl;
 
 }
