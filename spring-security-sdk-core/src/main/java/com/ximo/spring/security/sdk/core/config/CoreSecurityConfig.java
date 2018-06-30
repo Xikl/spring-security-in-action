@@ -1,6 +1,6 @@
 package com.ximo.spring.security.sdk.core.config;
 
-import com.ximo.spring.security.sdk.core.config.properties.SecurityProperties;
+import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Configuration;
  * @description
  */
 @Configuration
-@EnableConfigurationProperties(SecurityProperties.class)
+@EnableConfigurationProperties(SdkSecurityProperties.class)
 public class CoreSecurityConfig {
 }

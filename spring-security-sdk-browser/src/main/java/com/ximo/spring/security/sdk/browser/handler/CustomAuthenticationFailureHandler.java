@@ -1,6 +1,6 @@
 package com.ximo.spring.security.sdk.browser.handler;
 
-import com.ximo.spring.security.sdk.core.config.properties.SecurityProperties;
+import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
 import com.ximo.spring.security.sdk.core.enums.LoginResponseType;
 import com.ximo.spring.security.sdk.core.enums.ResultEnums;
 import com.ximo.spring.security.sdk.core.vo.ResultVO;
@@ -31,7 +31,7 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
     private ObjectMapper objectMapper;
 
     @Autowired
-    private SecurityProperties securityProperties;
+    private SdkSecurityProperties sdkSecurityProperties;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
@@ -40,7 +40,7 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
                                     throws IOException, ServletException {
         log.error("登录失败");
         //如果登录返回类型为JSON
-        if (LoginResponseType.JSON.equals(securityProperties.getBrowser().getLoginType())) {
+        if (LoginResponseType.JSON.equals(sdkSecurityProperties.getBrowser().getLoginType())) {
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             //返回ResultVO.error()对象

@@ -1,6 +1,6 @@
 package com.ximo.spring.security.sdk.browser.handler;
 
-import com.ximo.spring.security.sdk.core.config.properties.SecurityProperties;
+import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
 import com.ximo.spring.security.sdk.core.enums.LoginResponseType;
 import com.ximo.spring.security.sdk.core.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
@@ -32,13 +32,13 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 
     /** 安全配置项 */
     @Autowired
-    private SecurityProperties securityProperties;
+    private SdkSecurityProperties sdkSecurityProperties;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
                                                                                     throws ServletException, IOException {
         log.info("登录成功");
-        if (LoginResponseType.JSON.equals(securityProperties.getBrowser().getLoginType())) {
+        if (LoginResponseType.JSON.equals(sdkSecurityProperties.getBrowser().getLoginType())) {
             response.setStatus(HttpStatus.OK.value());
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.getWriter().write(objectMapper.writeValueAsString(ResultVO.success(authentication)));

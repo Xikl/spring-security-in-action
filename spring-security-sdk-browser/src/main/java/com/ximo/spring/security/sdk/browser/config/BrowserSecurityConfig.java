@@ -2,7 +2,7 @@ package com.ximo.spring.security.sdk.browser.config;
 
 import com.ximo.spring.security.sdk.browser.handler.CustomAuthenticationFailureHandler;
 import com.ximo.spring.security.sdk.browser.handler.CustomAuthenticationSuccessHandler;
-import com.ximo.spring.security.sdk.core.config.properties.SecurityProperties;
+import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
 import com.ximo.spring.security.sdk.core.filter.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
@@ -22,12 +22,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /** 安全配置 */
     @Autowired
-    private SecurityProperties securityProperties;
+    private SdkSecurityProperties sdkSecurityProperties;
 
+    /** 失败处理控制器 */
     @Autowired
     private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
+    /** 成功处理器 */
     @Autowired
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
@@ -39,7 +42,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR")
                 .antMatchers("/authentication/require", "/favicon.ico", "/code/image",
-                        securityProperties.getBrowser().getLoginPage()).permitAll()
+                        sdkSecurityProperties.getBrowser().getLoginPage()).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

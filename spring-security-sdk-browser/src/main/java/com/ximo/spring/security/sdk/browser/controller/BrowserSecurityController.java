@@ -1,6 +1,6 @@
 package com.ximo.spring.security.sdk.browser.controller;
 
-import com.ximo.spring.security.sdk.core.config.properties.SecurityProperties;
+import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
 import com.ximo.spring.security.sdk.core.enums.ResultEnums;
 import com.ximo.spring.security.sdk.core.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ public class BrowserSecurityController {
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Autowired
-    private SecurityProperties securityProperties;
+    private SdkSecurityProperties sdkSecurityProperties;
 
 
     /**
@@ -58,7 +58,7 @@ public class BrowserSecurityController {
             log.info("【浏览器控制器】引发跳转的url为：{}", redirectUrl);
             //如果引发跳转的url是以html结尾的那么直接重定向
             if (StringUtils.endsWithIgnoreCase(redirectUrl, DOT_HTML)) {
-                redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getLoginPage());
+                redirectStrategy.sendRedirect(request, response, sdkSecurityProperties.getBrowser().getLoginPage());
             }
         }
         return ResultVO.error(ResultEnums.AUTHENTICATION_REQUIRE);
