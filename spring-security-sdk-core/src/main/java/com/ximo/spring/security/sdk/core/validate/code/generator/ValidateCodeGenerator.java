@@ -8,7 +8,7 @@ import org.springframework.web.context.request.ServletWebRequest;
  * @date 2018/6/30
  * @description 验证码接口类
  */
-public interface ValidateCodeGenerator {
+public interface ValidateCodeGenerator<T extends ValidateCode> {
 
     /**
      * 创建ValidateCode {@link ValidateCode}
@@ -16,7 +16,7 @@ public interface ValidateCodeGenerator {
      * @param request {@link ServletWebRequest}请求对象
      * @return 验证码
      */
-    ValidateCode generate(ServletWebRequest request);
+    T generate(ServletWebRequest request);
 
 
 

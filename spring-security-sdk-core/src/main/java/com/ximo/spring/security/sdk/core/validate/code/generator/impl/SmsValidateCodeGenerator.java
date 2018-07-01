@@ -1,8 +1,9 @@
-package com.ximo.spring.security.sdk.core.validate.code.generator;
+package com.ximo.spring.security.sdk.core.validate.code.generator.impl;
 
 import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
 import com.ximo.spring.security.sdk.core.config.properties.SmsCodeProperties;
 import com.ximo.spring.security.sdk.core.validate.code.entity.ValidateCode;
+import com.ximo.spring.security.sdk.core.validate.code.generator.ValidateCodeGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ import org.springframework.web.context.request.ServletWebRequest;
  * @description 图形验证码
  */
 @Component
-public class SmsCodeGenerator implements ValidateCodeGenerator {
+public class SmsValidateCodeGenerator implements ValidateCodeGenerator<ValidateCode> {
 
     @Autowired
     private SdkSecurityProperties sdkSecurityProperties;

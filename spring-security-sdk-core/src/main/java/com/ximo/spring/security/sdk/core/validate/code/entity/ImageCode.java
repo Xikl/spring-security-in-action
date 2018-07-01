@@ -1,9 +1,6 @@
 package com.ximo.spring.security.sdk.core.validate.code.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.awt.image.BufferedImage;
 
@@ -12,10 +9,11 @@ import java.awt.image.BufferedImage;
  * @date 2018/6/25
  * @description 图形验证码信息
  */
-@EqualsAndHashCode(callSuper = true)
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class ImageCode extends ValidateCode {
 
     /** 验证码图片 */
@@ -26,7 +24,5 @@ public class ImageCode extends ValidateCode {
         super(code, expireIn);
         this.image = image;
     }
-
-
 
 }

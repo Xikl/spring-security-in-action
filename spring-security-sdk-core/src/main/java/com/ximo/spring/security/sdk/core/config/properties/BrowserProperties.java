@@ -1,6 +1,6 @@
 package com.ximo.spring.security.sdk.core.config.properties;
 
-import com.ximo.spring.security.sdk.core.enums.LoginResponseType;
+import com.ximo.spring.security.sdk.core.enums.LoginResponseTypeEnums;
 import lombok.Data;
 
 /**
@@ -15,7 +15,7 @@ public class BrowserProperties {
     private String loginPage = "/security-sdk-login.html";
 
     /** 登录返回类型 */
-    private LoginResponseType loginType = LoginResponseType.JSON;
+    private LoginResponseTypeEnums loginType = LoginResponseTypeEnums.JSON;
 
     /** 过期时间为一天 */
     private int rememberMeSeconds = 60 * 60 * 24;

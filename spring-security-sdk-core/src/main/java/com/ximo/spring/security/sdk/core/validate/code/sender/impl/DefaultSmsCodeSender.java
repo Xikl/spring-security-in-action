@@ -1,5 +1,6 @@
-package com.ximo.spring.security.sdk.core.validate.code.sms;
+package com.ximo.spring.security.sdk.core.validate.code.sender.impl;
 
+import com.ximo.spring.security.sdk.core.validate.code.sender.SmsCodeSender;
 import lombok.extern.slf4j.Slf4j;
 
 /**

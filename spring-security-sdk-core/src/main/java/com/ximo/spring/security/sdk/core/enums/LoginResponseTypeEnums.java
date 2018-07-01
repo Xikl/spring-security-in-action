@@ -5,7 +5,7 @@ package com.ximo.spring.security.sdk.core.enums;
  * @date 2018/6/28
  * @description 登录返回类型枚举对象
  */
-public enum LoginResponseType {
+public enum LoginResponseTypeEnums {
 
     /** 重定向 */
     REDIRECT,

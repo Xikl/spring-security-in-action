@@ -1,8 +1,9 @@
-package com.ximo.spring.security.sdk.core.validate.code.generator;
+package com.ximo.spring.security.sdk.core.validate.code.generator.impl;
 
 import com.ximo.spring.security.sdk.core.config.properties.ImageCodeProperties;
 import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
 import com.ximo.spring.security.sdk.core.validate.code.entity.ImageCode;
+import com.ximo.spring.security.sdk.core.validate.code.generator.ValidateCodeGenerator;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -15,11 +16,11 @@ import java.util.Random;
  * @date 2018/6/30
  * @description 图形验证码
  */
-public class ImageCodeGenerator implements ValidateCodeGenerator {
+public class ImageValidateCodeGenerator implements ValidateCodeGenerator<ImageCode> {
 
     private SdkSecurityProperties sdkSecurityProperties;
 
-    public ImageCodeGenerator(SdkSecurityProperties sdkSecurityProperties) {
+    public ImageValidateCodeGenerator(SdkSecurityProperties sdkSecurityProperties) {
         this.sdkSecurityProperties = sdkSecurityProperties;
     }
 

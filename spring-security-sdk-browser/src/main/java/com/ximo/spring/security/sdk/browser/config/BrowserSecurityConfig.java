@@ -59,7 +59,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR")
-                .antMatchers("/authentication/require", "/favicon.ico", "/code/image",
+                .antMatchers("/authentication/require", "/favicon.ico", "/code/*",
                         sdkSecurityProperties.getBrowser().getLoginPage()).permitAll()
                 .anyRequest().authenticated()
                 .and()

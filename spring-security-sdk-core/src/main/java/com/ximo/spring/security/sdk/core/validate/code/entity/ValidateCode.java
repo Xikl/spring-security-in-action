@@ -1,10 +1,7 @@
 package com.ximo.spring.security.sdk.core.validate.code.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 
 /**
@@ -12,7 +9,9 @@ import java.time.LocalDateTime;
  * @date 2018/6/25
  * @description 短信验证码
  */
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class ValidateCode {

@@ -1,7 +1,7 @@
 package com.ximo.spring.security.sdk.controller;
 
-import com.ximo.spring.security.sdk.core.util.ConstraintUtil;
-import com.ximo.spring.security.sdk.core.util.ResultUtil;
+import com.ximo.spring.security.sdk.core.util.ConstraintUtils;
+import com.ximo.spring.security.sdk.core.util.ResultUtils;
 import com.ximo.spring.security.sdk.core.vo.ResultVO;
 import com.ximo.spring.security.sdk.domain.User;
 import com.ximo.spring.security.sdk.dto.UserQueryCondition;
@@ -74,16 +74,16 @@ public class UserController {
 
     @PostMapping()
     public ResultVO<Map<String, Integer>> createUser(@Validated @RequestBody User user, BindingResult errors) {
-        ConstraintUtil.orElseThrow(errors);
+        ConstraintUtils.orElseThrow(errors);
         System.out.println(user);
-        return ResultVO.success(ResultUtil.one("userId", 2));
+        return ResultVO.success(ResultUtils.one("userId", 2));
     }
 
     @PutMapping()
     public ResultVO<Map<String, Integer>> updateUser(@Validated @RequestBody User user, BindingResult errors) {
-        ConstraintUtil.orElseThrow(errors);
+        ConstraintUtils.orElseThrow(errors);
         System.out.println(user);
-        return ResultVO.success(ResultUtil.one("userId", 2));
+        return ResultVO.success(ResultUtils.one("userId", 2));
     }
 
 

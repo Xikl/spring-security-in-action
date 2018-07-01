@@ -13,10 +13,10 @@ import static java.util.stream.Collectors.joining;
  * @date 2018/6/23
  * @description 约束工具类
  */
-public class ConstraintUtil {
+public class ConstraintUtils {
 
     /** 私有构造方法 */
-    private ConstraintUtil() {
+    private ConstraintUtils() {
         throw new UnsupportedOperationException();
     }
 

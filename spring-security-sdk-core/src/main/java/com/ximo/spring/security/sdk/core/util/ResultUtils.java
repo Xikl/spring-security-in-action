@@ -8,10 +8,10 @@ import java.util.Map;
  * @date 2018/6/22
  * @description
  */
-public class ResultUtil {
+public class ResultUtils {
 
     /** 私有构造 */
-    private ResultUtil() {
+    private ResultUtils() {
         throw new UnsupportedOperationException();
     }
 

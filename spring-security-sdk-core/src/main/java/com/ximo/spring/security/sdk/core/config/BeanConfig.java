@@ -1,10 +1,10 @@
 package com.ximo.spring.security.sdk.core.config;
 
 import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
-import com.ximo.spring.security.sdk.core.validate.code.generator.ImageCodeGenerator;
+import com.ximo.spring.security.sdk.core.validate.code.generator.impl.ImageValidateCodeGenerator;
 import com.ximo.spring.security.sdk.core.validate.code.generator.ValidateCodeGenerator;
-import com.ximo.spring.security.sdk.core.validate.code.sms.DefaultSmsCodeSender;
-import com.ximo.spring.security.sdk.core.validate.code.sms.SmsCodeSender;
+import com.ximo.spring.security.sdk.core.validate.code.sender.impl.DefaultSmsCodeSender;
+import com.ximo.spring.security.sdk.core.validate.code.sender.SmsCodeSender;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -35,9 +35,9 @@ public class BeanConfig {
      * @return 验证码生成器
      */
     @Bean
-    @ConditionalOnMissingBean(name = "imageCodeGenerator")
-    public ValidateCodeGenerator imageCodeGenerator() {
-        return new ImageCodeGenerator(sdkSecurityProperties);
+    @ConditionalOnMissingBean(name = "imageValidateCodeGenerator")
+    public ValidateCodeGenerator imageValidateCodeGenerator() {
+        return new ImageValidateCodeGenerator(sdkSecurityProperties);
     }
 
     /**

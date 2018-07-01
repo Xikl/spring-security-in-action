@@ -11,7 +11,7 @@ import lombok.Data;
 public class SmsCodeProperties {
 
     /** 短信验证码长度 */
-    private int length = 4;
+    private int length = 6;
 
     /** 短信验证码过期时间 */
     private int expireIn = 60;

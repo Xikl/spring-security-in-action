@@ -1,4 +1,4 @@
-package com.ximo.spring.security.sdk.core.validate.code.sms;
+package com.ximo.spring.security.sdk.core.validate.code.sender;
 
 /**
  * @author 朱文赵

@@ -1,7 +1,7 @@
 package com.ximo.spring.security.sdk.browser.handler;
 
 import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
-import com.ximo.spring.security.sdk.core.enums.LoginResponseType;
+import com.ximo.spring.security.sdk.core.enums.LoginResponseTypeEnums;
 import com.ximo.spring.security.sdk.core.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -38,7 +38,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
                                                                                     throws ServletException, IOException {
         log.info("登录成功");
-        if (LoginResponseType.JSON.equals(sdkSecurityProperties.getBrowser().getLoginType())) {
+        if (LoginResponseTypeEnums.JSON.equals(sdkSecurityProperties.getBrowser().getLoginType())) {
             response.setStatus(HttpStatus.OK.value());
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.getWriter().write(objectMapper.writeValueAsString(ResultVO.success(authentication)));
