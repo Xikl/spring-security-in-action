@@ -13,5 +13,6 @@ public class ValidateCodeProperties {
     /** 将图形验证码包装放到这一层 */
     private ImageCodeProperties image = new ImageCodeProperties();
 
-
+    /** 短信验证码配置属性 */
+    private SmsCodeProperties sms = new ImageCodeProperties();
 }

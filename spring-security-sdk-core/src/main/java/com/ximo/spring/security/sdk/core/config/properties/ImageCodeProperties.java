@@ -1,14 +1,16 @@
 package com.ximo.spring.security.sdk.core.config.properties;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author 朱文赵
  * @date 2018/6/30
  * @description 验证码配置选项
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class ImageCodeProperties {
+public class ImageCodeProperties extends SmsCodeProperties{
 
     /** 验证码宽度 */
     private int width = 67;
@@ -16,13 +18,7 @@ public class ImageCodeProperties {
     /** 验证码高度 */
     private int height = 23;
 
-    /** 验证码长度 */
-    private int length = 4;
-
-    /** 验证码过期时间 */
-    private int expireIn = 60;
-
-    /** 需要拦截的url */
-    private String interceptUrl;
-
+    public ImageCodeProperties() {
+        setLength(4);
+    }
 }
