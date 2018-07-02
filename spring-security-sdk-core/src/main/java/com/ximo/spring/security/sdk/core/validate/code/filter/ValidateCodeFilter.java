@@ -1,16 +1,16 @@
 package com.ximo.spring.security.sdk.core.validate.code.filter;
 
 import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
-import com.ximo.spring.security.sdk.core.validate.code.entity.ImageCode;
+import com.ximo.spring.security.sdk.core.enums.ValidateCodeTypeEnums;
 import com.ximo.spring.security.sdk.core.exception.ValidateCodeException;
+import com.ximo.spring.security.sdk.core.validate.code.holder.ValidateCodeProcessorHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.social.connect.web.HttpSessionSessionStrategy;
-import org.springframework.social.connect.web.SessionStrategy;
+import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -20,95 +20,96 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.ximo.spring.security.sdk.core.constants.CommonConstants.COMMA;
-import static com.ximo.spring.security.sdk.core.constants.CommonConstants.SESSION_KEY_IMAGE_CODE;
-import static java.util.stream.Collectors.toSet;
+import static com.ximo.spring.security.sdk.core.constants.SecurityConstants.*;
 
 /**
  * @author 朱文赵
  * @date 2018/6/28
  * @description 验证码过滤器,继承#{@link OncePerRequestFilter}保证该过滤器只会被执行一次
  */
+@Slf4j
+@Component
 public class ValidateCodeFilter extends OncePerRequestFilter {
-
-    /** 存放需要拦截的url */
-    private Set<String> interceptUrlsSet = new HashSet<>();
 
     /** ant路径匹配器 */
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     /** Sdk安全配置 */
+    @Autowired
     private SdkSecurityProperties sdkSecurityProperties;
 
     /** 验证失败处理器 */
+    @Autowired
     private AuthenticationFailureHandler authenticationFailureHandler;
 
-    /** session工具类 */
-    private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+    @Autowired
+    private ValidateCodeProcessorHolder validateCodeProcessorHolder;
 
-    public ValidateCodeFilter(AuthenticationFailureHandler authenticationFailureHandler, SdkSecurityProperties sdkSecurityProperties) {
-        this.authenticationFailureHandler = authenticationFailureHandler;
-        this.sdkSecurityProperties = sdkSecurityProperties;
-    }
+    /** 存放所有需要验证的验证码的url */
+    private Map<String, ValidateCodeTypeEnums> urlMap = new HashMap<>();
+
 
     /**
      * 调用 {@link InitializingBean#afterPropertiesSet()}方法
-     * 初始化需要拦截的urlSet 赋值需要拦截的url给{@link #interceptUrlsSet}
+     * 初始化需要拦截的urlSet 赋值需要拦截的url给urlMap
      *
      * @throws ServletException servlet异常
      */
     @Override
     public void afterPropertiesSet() throws ServletException {
         super.afterPropertiesSet();
-        //获得需要拦截的url的数组 可能为空
-        Optional<String[]> configUrlsOptional = Optional.ofNullable(StringUtils
-                .splitByWholeSeparatorPreserveAllTokens(sdkSecurityProperties.getCode().getImage().getInterceptUrl(), COMMA));
-        //不为空则添加
-        configUrlsOptional.ifPresent(configUrl -> interceptUrlsSet.addAll(Arrays.asList(configUrl)));
-        //添加登录url
-        interceptUrlsSet.add("/authentication/form");
+        //添加拦截配置信息前端固定url
+        urlMap.put(DEFAULT_LOGIN_PROCESSING_URL_FORM, ValidateCodeTypeEnums.IMAGE);
+        urlMap.put(DEFAULT_LOGIN_PROCESSING_URL_MOBILE, ValidateCodeTypeEnums.SMS);
+
+        //添加拦截用户自定义需要拦截的url
+        addUrlToMap(sdkSecurityProperties.getCode().getImage().getInterceptUrl(), ValidateCodeTypeEnums.IMAGE);
+        addUrlToMap(sdkSecurityProperties.getCode().getSms().getInterceptUrl(), ValidateCodeTypeEnums.SMS);
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        //判断是否需要拦截
-        boolean interceptor = interceptUrlsSet.stream().anyMatch(url -> antPathMatcher.match(url, request.getRequestURI()));
-        //如果需要过滤
-        if (interceptor) {
-            try {
-                validate(new ServletWebRequest(request));
-            } catch (ValidateCodeException e) {
-                //出现错误直接返回
-                authenticationFailureHandler.onAuthenticationFailure(request, response, e);
-                return;
+
+        try {
+            ValidateCodeTypeEnums validateCodeTypeEnums = getValidateCodeTypeEnums(request);
+            if (validateCodeTypeEnums != null) {
+                log.info("校验请求[{}]中的验证码类型为{}", request.getRequestURI(), validateCodeTypeEnums);
+                validateCodeProcessorHolder.findValidateCodeProcessor(validateCodeTypeEnums)
+                        .validate(new ServletWebRequest(request, response));
             }
+        } catch (ValidateCodeException e) {
+            authenticationFailureHandler.onAuthenticationFailure(request, response, e);
+            //失败直接返回，不要去调下一个过滤器
+            return;
         }
+
         filterChain.doFilter(request, response);
     }
 
-    private void validate(ServletWebRequest request) throws ServletRequestBindingException {
-        ImageCode codeInSession = (ImageCode) sessionStrategy.getAttribute(request, SESSION_KEY_IMAGE_CODE);
-
-        String codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(), "imageCode");
-
-        if (StringUtils.isBlank(codeInRequest)) {
-            throw new ValidateCodeException("验证码的值不能为空");
+    private ValidateCodeTypeEnums getValidateCodeTypeEnums(HttpServletRequest request) {
+        AtomicReference<ValidateCodeTypeEnums> result = new AtomicReference<>();
+        if (!StringUtils.equalsIgnoreCase(request.getMethod(), GET_METHOD)) {
+            urlMap.forEach((url, typeEnums) -> {
+                if (antPathMatcher.match(url, request.getRequestURI())) {
+                    result.set(typeEnums);
+                }
+            });
         }
-        if (codeInSession == null) {
-            throw new ValidateCodeException("验证码不存在");
-        }
-        if (codeInSession.isExpire()) {
-            sessionStrategy.removeAttribute(request, SESSION_KEY_IMAGE_CODE);
-            throw new ValidateCodeException("验证码已经过期");
-        }
-        if (!StringUtils.equals(codeInSession.getCode(), codeInRequest)) {
-            throw new ValidateCodeException("验证码不匹配");
-        }
-        sessionStrategy.removeAttribute(request, SESSION_KEY_IMAGE_CODE);
+        return result.get();
     }
+
+
+    protected void addUrlToMap(String urlString, ValidateCodeTypeEnums validateCodeTypeEnums) {
+        if (StringUtils.isNoneBlank(urlString)) {
+            String[] urls = StringUtils.splitByWholeSeparatorPreserveAllTokens(urlString, COMMA);
+            Arrays.stream(urls).forEach(url -> urlMap.put(url, validateCodeTypeEnums));
+        }
+    }
+
 }

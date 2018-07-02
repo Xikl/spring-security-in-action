@@ -1,5 +1,7 @@
 package com.ximo.spring.security.sdk.core.enums;
 
+import lombok.ToString;
+
 import static com.ximo.spring.security.sdk.core.constants.SecurityConstants.DEFAULT_PARAMETER_NAME_CODE_IMAGE;
 import static com.ximo.spring.security.sdk.core.constants.SecurityConstants.DEFAULT_PARAMETER_NAME_CODE_SMS;
 
@@ -8,6 +10,7 @@ import static com.ximo.spring.security.sdk.core.constants.SecurityConstants.DEFA
  * @date 2018/7/1
  * @description
  */
+@ToString
 public enum ValidateCodeTypeEnums {
     /** 短信验证码 */
     SMS {

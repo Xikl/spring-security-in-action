@@ -19,5 +19,11 @@ public interface ValidateCodeProcessor {
      */
     void create(ServletWebRequest request) throws IOException, ServletRequestBindingException;
 
+    /**
+     * 校验验证码
+     *
+     * @param servletWebRequest servlet工具类
+     */
+    void validate(ServletWebRequest servletWebRequest);
 
 }

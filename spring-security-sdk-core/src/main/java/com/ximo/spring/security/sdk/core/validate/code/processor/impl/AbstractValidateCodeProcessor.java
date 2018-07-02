@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.ximo.spring.security.sdk.core.constants.CommonConstants.SESSION_KEY_IMAGE_CODE;
 import static com.ximo.spring.security.sdk.core.constants.SecurityConstants.SESSION_KEY_FOR_CODE_PREFIX;
 
 /**
@@ -64,7 +66,7 @@ public abstract class AbstractValidateCodeProcessor<T extends ValidateCode> impl
      * @return 验证码
      */
     private T generate(ServletWebRequest request) {
-        String validateCodeType = getValidateCodeType(request);
+        String validateCodeType = getValidateCodeType(request).toString().toLowerCase();
         String generatorName = getGeneratorName(validateCodeType);
         Optional<ValidateCodeGenerator<T>> validateCodeGeneratorOptional =
                 Optional.ofNullable(validateCodeGeneratorMap.get(generatorName));
@@ -74,8 +76,9 @@ public abstract class AbstractValidateCodeProcessor<T extends ValidateCode> impl
                 .generate(request);
     }
 
-    private String getValidateCodeType(ServletWebRequest request) {
-        return StringUtils.substringAfter(request.getRequest().getRequestURI(), "/code/");
+    private ValidateCodeTypeEnums getValidateCodeType(ServletWebRequest request) {
+        String validateType = StringUtils.substringBefore(getClass().getSimpleName(), ValidateCodeProcessor.class.getSimpleName());
+        return ValidateCodeTypeEnums.valueOf(validateType.toUpperCase());
     }
 
     /**
@@ -85,7 +88,7 @@ public abstract class AbstractValidateCodeProcessor<T extends ValidateCode> impl
      * @return 存入session中的key
      */
     private String getSessionKey(ServletWebRequest request) {
-        return String.format("%s%s", SESSION_KEY_FOR_CODE_PREFIX, getValidateCodeType(request).toUpperCase());
+        return String.format("%s%s", SESSION_KEY_FOR_CODE_PREFIX, getValidateCodeType(request).toString().toUpperCase());
     }
 
     /**
@@ -108,4 +111,36 @@ public abstract class AbstractValidateCodeProcessor<T extends ValidateCode> impl
      */
     protected abstract void send(ServletWebRequest request, T validateCode) throws IOException, ServletRequestBindingException;
 
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void validate(ServletWebRequest servletWebRequest) {
+
+        try {
+            ValidateCodeTypeEnums typeEnums = getValidateCodeType(servletWebRequest);
+            String sessionKey = getSessionKey(servletWebRequest);
+            T codeInSession = (T)sessionStrategy.getAttribute(servletWebRequest, sessionKey);
+            String codeInRequest = ServletRequestUtils.getStringParameter(servletWebRequest.getRequest(),
+                    typeEnums.getParamNameOnValidate());
+
+            if (StringUtils.isBlank(codeInRequest)) {
+                throw new ValidateCodeException("验证码的值不能为空");
+            }
+            if (codeInSession == null) {
+                throw new ValidateCodeException("验证码不存在");
+            }
+            if (codeInSession.isExpire()) {
+                sessionStrategy.removeAttribute(servletWebRequest, SESSION_KEY_IMAGE_CODE);
+                throw new ValidateCodeException("验证码已经过期");
+            }
+            if (!StringUtils.equals(codeInSession.getCode(), codeInRequest)) {
+                throw new ValidateCodeException("验证码不匹配");
+            }
+            sessionStrategy.removeAttribute(servletWebRequest, SESSION_KEY_IMAGE_CODE);
+        } catch (ServletRequestBindingException e) {
+            throw new ValidateCodeException("获取验证码的值失败");
+        }
+
+
+    }
 }
