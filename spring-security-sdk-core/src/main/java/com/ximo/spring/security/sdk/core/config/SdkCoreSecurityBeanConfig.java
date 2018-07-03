@@ -1,11 +1,11 @@
 package com.ximo.spring.security.sdk.core.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
 import com.ximo.spring.security.sdk.core.validate.code.generator.impl.ImageValidateCodeGenerator;
 import com.ximo.spring.security.sdk.core.validate.code.generator.ValidateCodeGenerator;
 import com.ximo.spring.security.sdk.core.validate.code.sender.impl.DefaultSmsCodeSender;
 import com.ximo.spring.security.sdk.core.validate.code.sender.SmsCodeSender;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
  * @description bean生成配置类
  */
 @Configuration
-public class BeanConfig {
+public class SdkCoreSecurityBeanConfig {
 
     @Autowired
     private SdkSecurityProperties sdkSecurityProperties;

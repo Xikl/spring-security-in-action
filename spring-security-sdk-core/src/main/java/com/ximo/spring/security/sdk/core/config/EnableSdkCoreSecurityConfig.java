@@ -11,5 +11,5 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(SdkSecurityProperties.class)
-public class CoreSecurityConfig {
+public class EnableSdkCoreSecurityConfig {
 }
