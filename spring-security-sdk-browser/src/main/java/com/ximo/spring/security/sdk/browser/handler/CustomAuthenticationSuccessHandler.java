@@ -1,10 +1,10 @@
 package com.ximo.spring.security.sdk.browser.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
 import com.ximo.spring.security.sdk.core.enums.LoginResponseTypeEnums;
 import com.ximo.spring.security.sdk.core.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

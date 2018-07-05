@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * @author 朱文赵
  * @date 2018/7/4
- * @description
+ * @description qq服务实现类
  */
 public class QQImpl extends AbstractOAuth2ApiBinding implements QQ {
 
@@ -38,10 +38,14 @@ public class QQImpl extends AbstractOAuth2ApiBinding implements QQ {
 
 
     @Override
-    public QQUserInfo getQQUserInfo() throws IOException {
-        String url = String.format(URL_GET_USER_INFO, appId, openId);
-        String result = getRestTemplate().getForObject(url, String.class);
-        System.out.println(result);
-        return objectMapper.readValue(result, QQUserInfo.class);
+    public QQUserInfo getQQUserInfo() {
+        try {
+            String url = String.format(URL_GET_USER_INFO, appId, openId);
+            String result = getRestTemplate().getForObject(url, String.class);
+            System.out.println(result);
+            return objectMapper.readValue(result, QQUserInfo.class);
+        } catch (IOException e) {
+            throw new RuntimeException("获取用户信息失败", e);
+        }
     }
 }

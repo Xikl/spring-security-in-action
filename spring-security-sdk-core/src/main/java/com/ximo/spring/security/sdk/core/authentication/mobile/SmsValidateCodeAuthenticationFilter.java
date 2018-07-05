@@ -1,5 +1,6 @@
 package com.ximo.spring.security.sdk.core.authentication.mobile;
 
+import static com.ximo.spring.security.sdk.core.constants.SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE;
 import static com.ximo.spring.security.sdk.core.constants.SecurityConstants.POST_METHOD;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -31,7 +32,7 @@ public class SmsValidateCodeAuthenticationFilter extends
     // ===================================================================================================
 
     public SmsValidateCodeAuthenticationFilter() {
-        super(new AntPathRequestMatcher("/authentication/mobile", POST_METHOD));
+        super(new AntPathRequestMatcher(DEFAULT_LOGIN_PROCESSING_URL_MOBILE, POST_METHOD));
     }
 
     // ~ Methods

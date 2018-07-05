@@ -12,8 +12,12 @@ spring:
       name: user
       password: 123
       roles: USER
-#user-default:
-#  security:
+user-default:
+  security:
+    social:
+      qq:
+        app-id: wxd99431bbff8305a0
+        app-secret: 60f78681d063590a469f1b297feff3c4
 #    browser:
 #      login-page: /demo-login.html
 #    code:

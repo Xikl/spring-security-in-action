@@ -4,10 +4,14 @@ import com.ximo.spring.security.sdk.domain.User;
 import com.ximo.spring.security.sdk.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.security.SocialUser;
+import org.springframework.social.security.SocialUserDetails;
+import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,7 +23,7 @@ import java.util.Date;
  */
 @Slf4j
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService, UserDetailsService, SocialUserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -31,10 +35,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("username:", username);
+        log.info("表单登录username:", username);
         //1.从数据库根据用户名中查找用户信息
         //2.根据查找到用户的信息判断用户是否已经被冻结
         //passwordEncoder.encode 操作应该是在用户注册的时候 做的操作 这里应该只拿到数据库中存储的密码
         return new User(1, username, passwordEncoder.encode("123456"), new Date());
+    }
+
+    @Override
+    public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
+        log.info("社交登录userId:", userId);
+        //1.从数据库根据用户名中查找用户信息
+        //2.根据查找到用户的信息判断用户是否已经被冻结
+        //passwordEncoder.encode 操作应该是在用户注册的时候 做的操作 这里应该只拿到数据库中存储的密码
+        return new SocialUser(userId, passwordEncoder.encode("123456"),
+                AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
     }
 }
