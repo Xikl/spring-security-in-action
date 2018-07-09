@@ -87,7 +87,9 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                             DEFAULT_LOGIN_PROCESSING_URL_FORM,
                             "/favicon.ico",
                             DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
-                            sdkSecurityProperties.getBrowser().getLoginPage()).permitAll()
+                            sdkSecurityProperties.getBrowser().getLoginPage(),
+                            sdkSecurityProperties.getBrowser().getRegisterPage(),
+                            "/user/register").permitAll()
                     .anyRequest()
                     .authenticated()
                 .and()

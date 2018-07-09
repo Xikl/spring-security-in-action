@@ -1,5 +1,6 @@
 package com.ximo.spring.security.sdk.browser.controller;
 
+import com.ximo.spring.security.sdk.browser.support.SocialUserInfo;
 import com.ximo.spring.security.sdk.core.config.properties.SdkSecurityProperties;
 import com.ximo.spring.security.sdk.core.enums.ResultEnums;
 import com.ximo.spring.security.sdk.core.vo.ResultVO;
@@ -12,9 +13,12 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +45,9 @@ public class BrowserSecurityController {
     @Autowired
     private SdkSecurityProperties sdkSecurityProperties;
 
+    @Autowired
+    private ProviderSignInUtils providerSignInUtils;
+
 
     /**
      * 当需要身份验证的时候，跳转到这里
@@ -64,5 +71,22 @@ public class BrowserSecurityController {
         return ResultVO.error(ResultEnums.AUTHENTICATION_REQUIRE);
     }
 
+    /**
+     * 从session中拿用户信息
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("/social/user")
+    public ResultVO<SocialUserInfo> getSocialUserInfo(HttpServletRequest request) {
+        Connection<?> connectionFromSession =
+                providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
+        SocialUserInfo socialUserInfo = new SocialUserInfo();
+        socialUserInfo.setProviderId(connectionFromSession.getKey().getProviderId());
+        socialUserInfo.setProviderUserId(connectionFromSession.getKey().getProviderUserId());
+        socialUserInfo.setNickname(connectionFromSession.getDisplayName());
+        socialUserInfo.setHeaderImg(connectionFromSession.getImageUrl());
+        return ResultVO.success(socialUserInfo);
+    }
 
 }

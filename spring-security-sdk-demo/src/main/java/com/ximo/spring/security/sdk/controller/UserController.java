@@ -5,15 +5,20 @@ import com.ximo.spring.security.sdk.core.util.ResultUtils;
 import com.ximo.spring.security.sdk.core.vo.ResultVO;
 import com.ximo.spring.security.sdk.domain.User;
 import com.ximo.spring.security.sdk.dto.UserQueryCondition;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.ServletWebRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +32,24 @@ import java.util.Map;
 @RequestMapping("/user")
 @RestController
 public class UserController {
+
+    @Autowired
+    private ProviderSignInUtils providerSignInUtils;
+
+    /**
+     * 获取当前用户
+     *
+     * @return 当前用户
+     */
+    @PostMapping("/register")
+    public ResultVO register(User user, HttpServletRequest request) {
+        //获得用户唯一标示
+        String username = user.getUsername();
+        //将该数据一起放到spring social中 和 openId一起保存进去
+        providerSignInUtils.doPostSignUp(username, new ServletWebRequest(request));
+        return ResultVO.success();
+
+    }
 
 
     /**

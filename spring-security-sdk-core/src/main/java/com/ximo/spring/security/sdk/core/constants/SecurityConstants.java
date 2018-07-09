@@ -48,6 +48,8 @@ public interface SecurityConstants {
      */
     String DEFAULT_LOGIN_PAGE_URL = "/security-sdk-login.html";
 
+
+    String DEFAULT_REGISTER_PAGE_URL = "/security-sdk-register.html";
     /**
      * session失效默认的跳转地址
      */

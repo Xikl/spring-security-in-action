@@ -10,7 +10,6 @@ import static com.ximo.spring.security.sdk.core.constants.SecurityConstants.DEFA
  * @date 2018/7/1
  * @description
  */
-@ToString
 public enum ValidateCodeTypeEnums {
     /** 短信验证码 */
     SMS {
@@ -35,7 +34,5 @@ public enum ValidateCodeTypeEnums {
      * @return 验证码的名字
      */
     public abstract String getParamNameOnValidate();
-
-
 
 }
