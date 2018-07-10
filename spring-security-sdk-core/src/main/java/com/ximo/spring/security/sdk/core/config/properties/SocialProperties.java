@@ -16,5 +16,8 @@ public class SocialProperties {
     /** 过滤器的处理的url */
     private String filterProcessUrl = "/auth";
 
+    private WeiXinProperties winxin = new WeiXinProperties();
+
+
 
 }

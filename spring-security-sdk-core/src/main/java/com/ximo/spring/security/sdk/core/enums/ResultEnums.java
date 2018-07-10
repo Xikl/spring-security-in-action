@@ -18,6 +18,7 @@ public enum ResultEnums {
     CONSTRAINT_ERROR(3, "约束异常"),
     AUTHENTICATION_REQUIRE(4, "访问的服务需要验证，请引导用户到登录页面"),
     LOGIN_ERROR(5, "登录失败"),
+    THIRD_PARTY_SERVICE_ERROR(6, "调用第三方服务失败"),
     ;
 
 
