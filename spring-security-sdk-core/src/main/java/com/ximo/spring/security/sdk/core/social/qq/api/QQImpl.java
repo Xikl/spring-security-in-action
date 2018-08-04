@@ -17,34 +17,47 @@ import java.io.IOException;
 @Slf4j
 public class QQImpl extends AbstractOAuth2ApiBinding implements QQ {
 
+    /** 获取openId的url 需要传入accessToken的信息 */
     private static final String URL_GET_OPEN_ID = "https://graph.qq.com/oauth2.0/me?access_token=%s";
 
+    /** 拿accessToken 和 openId 和appId换取用户信息 */
     private static final String URL_GET_USER_INFO = "https://graph.qq.com/user/get_user_info?oauth_consumer_key=%s&openid=%s";
 
+    /** appId */
     private String appId;
 
+    /** openId */
     private String openId;
+
+    /** 还有一个参数accessToken 已经存在于父类 */
 
     @Autowired
     private ObjectMapper objectMapper;
 
     /** 将accessToken作为查询参数传输 */
     public QQImpl(String accessToken, String appId) {
+        //将accessToken作为查询参数传输
         super(accessToken, TokenStrategy.ACCESS_TOKEN_PARAMETER);
         this.appId = appId;
         String url = String.format(URL_GET_OPEN_ID, accessToken);
-        String appIdResult = getRestTemplate().getForObject(url, String.class);
-        log.info("appId{}", appIdResult);
-        this.openId = StringUtils.substringBetween(appIdResult, "\"openId\":\"", "\"}");
+        String result = getRestTemplate().getForObject(url, String.class);
+        log.info("openIdResult{}", result);
+        //获得OpenId
+        this.openId = StringUtils.substringBetween(result, "\"openId\":\"", "\"}");
     }
 
 
+    /**
+     * 获取用户信息
+     *
+     * @return qq 用户信息
+     */
     @Override
     public QQUserInfo getQQUserInfo() {
         try {
             String url = String.format(URL_GET_USER_INFO, appId, openId);
             String result = getRestTemplate().getForObject(url, String.class);
-            log.info("result{}", result);
+            log.info("qqUserInfo{}", result);
             QQUserInfo qqUserInfo = objectMapper.readValue(result, QQUserInfo.class);
             qqUserInfo.setOpenId(openId);
             return qqUserInfo;

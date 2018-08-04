@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 /**
  * @author 朱文赵
  * @date 2018/7/4
- * @description
+ * @description  配置类
  */
 @Configuration
 @EnableSocial

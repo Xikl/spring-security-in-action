@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * @author 朱文赵
  * @date 2018/7/4
- * @description
+ * @description 适配器
  */
 public class QQAdapter implements ApiAdapter<QQ> {
 
@@ -27,6 +27,12 @@ public class QQAdapter implements ApiAdapter<QQ> {
         return true;
     }
 
+    /**
+     * 将用户信息放到一个标准的连接value 方便放入到session中
+     *
+     * @param api
+     * @param values
+     */
     @Override
     public void setConnectionValues(QQ api, ConnectionValues values) {
         QQUserInfo qqUserInfo = api.getQQUserInfo();
